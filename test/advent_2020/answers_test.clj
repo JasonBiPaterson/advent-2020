@@ -2,7 +2,9 @@
   (:require [clojure.test :refer [deftest is testing]]
             [advent-2020.day-01 :as day-01]
             [advent-2020.day-02 :as day-02]
-            [advent-2020.day-03 :as day-03]))
+            [advent-2020.day-03 :as day-03]
+            [advent-2020.day-04 :as day-04]
+            [advent-2020.day-05 :as day-05]))
 
 (deftest answers
   (testing "Day 1"
@@ -15,4 +17,12 @@
 
   (testing "Day 3"
     (is (= day-03/part-1 156))
-    (is (= day-03/part-2 3521829480))))
+    (is (= day-03/part-2 3521829480)))
+
+  (testing "Day 4"
+    (is (= day-04/part-1 245))
+    (is (= day-04/part-2 133)))
+
+  (testing "Day 5"
+    (is (= day-05/part-1 919))
+    (is (= day-05/part-2 642))))
