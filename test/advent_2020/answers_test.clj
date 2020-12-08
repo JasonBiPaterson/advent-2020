@@ -4,7 +4,9 @@
             [advent-2020.day-02 :as day-02]
             [advent-2020.day-03 :as day-03]
             [advent-2020.day-04 :as day-04]
-            [advent-2020.day-05 :as day-05]))
+            [advent-2020.day-05 :as day-05]
+            [advent-2020.day-06 :as day-06]
+            [advent-2020.day-07 :as day-07]))
 
 (deftest answers
   (testing "Day 1"
@@ -25,4 +27,12 @@
 
   (testing "Day 5"
     (is (= day-05/part-1 919))
-    (is (= day-05/part-2 642))))
+    (is (= day-05/part-2 642)))
+
+  (testing "Day 6"
+    (is (= day-06/part-1 6161))
+    (is (= day-06/part-2 2971)))
+
+  (testing "Day 7"
+    (is (= day-07/part-1 287))
+    (is (= day-07/part-2 48160))))
