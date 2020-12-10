@@ -28,7 +28,3 @@
 
 (def part-2
   (multiply-matches find-triple 2020 input))
-
-(defn run [_]
-  (println part-1)
-  (println part-2))

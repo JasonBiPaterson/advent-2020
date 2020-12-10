@@ -29,7 +29,3 @@
   (->> slopes
        (map #(apply tree-count %))
        (reduce *)))
-
-(defn run [_]
-  (println part-1)
-  (println part-2))

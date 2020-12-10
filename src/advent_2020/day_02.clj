@@ -32,7 +32,3 @@
                      match2? (= char (nth password (dec b)))]
                  (and (or match1? match2?)
                       (not (and match1? match2?)))))))
-
-(defn run [_]
-  (println part-1)
-  (println part-2))

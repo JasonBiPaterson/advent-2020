@@ -1,9 +1,7 @@
 (ns advent-2020.day-07
   (:require [clojure.java.io :as io]
             [medley.core :as medley]
-            [clojure.string :as string]
-            [clojure.set :as set]))
-medley/map-vals
+            [clojure.string :as string]))
 
 (defn process-input [i]
   (into {}
