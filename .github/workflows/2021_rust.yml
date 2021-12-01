@@ -1,0 +1,29 @@
+name: 2021 Rust
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - '2021/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - '2021/**'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Test solutions
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: '2021'
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run tests
+      run: cargo test --verbose
+
