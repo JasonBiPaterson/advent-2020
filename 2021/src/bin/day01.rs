@@ -1,22 +1,11 @@
 use std::fs;
 
 fn part1(entries: &[i32]) -> usize {
-    entries
-        .iter()
-        .zip(entries.iter().skip(1))
-        .filter(|(&a, &b)| -> bool { b > a })
-        .collect::<Vec<(&i32, &i32)>>()
-        .len()
+    entries.windows(2).filter(|ns| ns[1] > ns[0]).count()
 }
 
 fn part2(entries: &[i32]) -> usize {
-    let sums: Vec<i32> = entries
-        .iter()
-        .zip(entries.iter().skip(1))
-        .map(|(a, b)| -> i32 { a + b })
-        .zip(entries.iter().skip(2))
-        .map(|(a, b)| -> i32 { a + b })
-        .collect();
+    let sums: Vec<i32> = entries.windows(3).map(|w| w.iter().sum::<i32>()).collect();
 
     part1(&sums)
 }
@@ -29,8 +18,8 @@ fn main() {
         .map(|line| line.parse().expect("Not a number"))
         .collect();
 
-    println!("{}", part1(&entries));
-    println!("{}", part2(&entries));
+    println!("Part 1: {}", part1(&entries));
+    println!("Part 2: {}", part2(&entries));
 }
 
 #[cfg(test)]
