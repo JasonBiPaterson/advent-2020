@@ -1,0 +1,28 @@
+name: Rust
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Test Rust solutions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dirs: ['2020_rust', '2021']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run tests
+      run: |
+        cd $DIR
+        cargo test --verbose
+      env:
+        DIR: ${{ matrix.dirs }}
+
