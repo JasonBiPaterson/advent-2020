@@ -46,7 +46,7 @@ fn find_rating(words: &[&str], bit_match: (char, char, char)) -> u32 {
         remaining_words = remaining_words
             .iter()
             .filter(|&word| word.chars().nth(i) == Some(bit_char))
-            .map(|m| *m)
+            .map(|&m| m)
             .collect::<Vec<&str>>();
         if remaining_words.len() == 1 {
             break;
@@ -73,22 +73,18 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    const WORDS: [&str; 12] = [
+        "00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000",
+        "11001", "00010", "01010",
+    ];
 
     #[test]
     fn test_part1() {
-        let words = vec![
-            "00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000",
-            "11001", "00010", "01010",
-        ];
-        assert_eq!(part1(&words), 198);
+        assert_eq!(part1(&WORDS), 198);
     }
 
     #[test]
     fn test_part2() {
-        let words = vec![
-            "00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000",
-            "11001", "00010", "01010",
-        ];
-        assert_eq!(part2(&words), 230);
+        assert_eq!(part2(&WORDS), 230);
     }
 }

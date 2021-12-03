@@ -1,6 +1,6 @@
 use std::fs;
 
-fn part1(words: &Vec<&str>) -> i32 {
+fn part1(words: &[&str]) -> i32 {
     let mut x = 0;
     let mut y = 0;
     for line in words.chunks_exact(2) {
@@ -16,7 +16,7 @@ fn part1(words: &Vec<&str>) -> i32 {
     x * y
 }
 
-fn part2(words: &Vec<&str>) -> i32 {
+fn part2(words: &[&str]) -> i32 {
     let mut x = 0;
     let mut y = 0;
     let mut aim = 0;
@@ -48,20 +48,17 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    const WORDS: [&str; 12] = [
+        "forward", "5", "down", "5", "forward", "8", "up", "3", "down", "8", "forward", "2",
+    ];
 
     #[test]
     fn test_part1() {
-        let words = vec![
-            "forward", "5", "down", "5", "forward", "8", "up", "3", "down", "8", "forward", "2",
-        ];
-        assert_eq!(part1(&words), 150);
+        assert_eq!(part1(&WORDS), 150);
     }
 
     #[test]
     fn test_part2() {
-        let words = vec![
-            "forward", "5", "down", "5", "forward", "8", "up", "3", "down", "8", "forward", "2",
-        ];
-        assert_eq!(part2(&words), 900);
+        assert_eq!(part2(&WORDS), 900);
     }
 }
