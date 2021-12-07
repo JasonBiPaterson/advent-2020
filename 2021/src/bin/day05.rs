@@ -124,13 +124,13 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let lines = parse_input(&INPUT);
+        let lines = parse_input(INPUT);
         assert_eq!(part1(&lines), 5);
     }
 
     #[test]
     fn test_part2() {
-        let lines = parse_input(&INPUT);
+        let lines = parse_input(INPUT);
         assert_eq!(part2(&lines), 12);
     }
 }

@@ -9,8 +9,8 @@ fn parse_input(input: &str) -> Vec<u32> {
 }
 
 fn crab_range(crabs: &[u32]) -> ops::Range<u32> {
-    let min: u32 = *crabs.iter().min().unwrap();
-    let max: u32 = *crabs.iter().max().unwrap();
+    let min = *crabs.iter().min().unwrap();
+    let max = *crabs.iter().max().unwrap();
     min..max
 }
 
@@ -58,13 +58,13 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let crabs = parse_input(&INPUT);
+        let crabs = parse_input(INPUT);
         assert_eq!(part1(&crabs), 37);
     }
 
     #[test]
     fn test_part2() {
-        let crabs = parse_input(&INPUT);
+        let crabs = parse_input(INPUT);
         assert_eq!(part2(&crabs), 168);
     }
 }

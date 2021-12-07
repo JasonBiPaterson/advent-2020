@@ -2,7 +2,7 @@ use std::fs;
 
 type Board = Vec<Vec<u32>>;
 
-fn bingo_score(draws: &[u32], board: &Board) -> Option<u32> {
+fn bingo_score(draws: &[u32], board: &[Vec<u32>]) -> Option<u32> {
     let is_bingo = (0..5).any(|i| {
         (0..5).all(|j| draws.contains(&board[i][j])) || (0..5).all(|j| draws.contains(&board[j][i]))
     });
@@ -21,8 +21,10 @@ fn bingo_score(draws: &[u32], board: &Board) -> Option<u32> {
 fn part1(draws: &[u32], boards: &[Board]) -> u32 {
     for i in 5..draws.len() {
         let draw_slice = &draws[0..i];
-        let score = boards.iter().find_map(|board| bingo_score(&draw_slice, &board));
-        if score.is_some() {
+        let score = boards
+            .iter()
+            .find_map(|board| bingo_score(draw_slice, board));
+        if let Some(..) = score {
             return score.unwrap() * draw_slice.last().unwrap();
         }
     }
@@ -34,12 +36,12 @@ fn part2(draws: &[u32], boards: &[Board]) -> u32 {
     for i in 5..draws.len() {
         let draw_slice = &draws[0..i];
         if remaining_boards.len() == 1 {
-            let score = bingo_score(&draw_slice, &remaining_boards[0]);
-            if score.is_some() {
+            let score = bingo_score(draw_slice, &remaining_boards[0]);
+            if let Some(..) = score {
                 return score.unwrap() * draw_slice.last().unwrap();
             }
         } else {
-            remaining_boards.retain(|board| bingo_score(&draw_slice, &board) == None);
+            remaining_boards.retain(|board| bingo_score(draw_slice, board) == None);
         };
     }
     panic!("No bingo!")
@@ -103,13 +105,13 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let (draws, boards) = parse_input(&INPUT);
+        let (draws, boards) = parse_input(INPUT);
         assert_eq!(part1(&draws, &boards), 4512);
     }
 
     #[test]
     fn test_part2() {
-        let (draws, boards) = parse_input(&INPUT);
+        let (draws, boards) = parse_input(INPUT);
         assert_eq!(part2(&draws, &boards), 1924);
     }
 }
