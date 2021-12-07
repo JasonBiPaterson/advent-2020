@@ -22,8 +22,7 @@ impl Line {
         match self.point1.x.cmp(&self.point2.x) {
             cmp::Ordering::Less => (&self.point1, &self.point2),
             cmp::Ordering::Equal if self.point1.y < self.point2.y => (&self.point1, &self.point2),
-            cmp::Ordering::Equal => (&self.point2, &self.point1),
-            cmp::Ordering::Greater => (&self.point2, &self.point1),
+            cmp::Ordering::Equal | cmp::Ordering::Greater => (&self.point2, &self.point1),
         }
     }
 
@@ -76,9 +75,9 @@ fn part1(lines: &[Line]) -> usize {
     lines
         .iter()
         .filter(|&line| line.is_cardinal())
-        .flat_map(|line| line.to_points())
+        .flat_map(Line::to_points)
         .for_each(|point| {
-            *point_count.entry(point).or_insert(0usize) += 1;
+            *point_count.entry(point).or_insert(0_usize) += 1;
         });
 
     point_count.values().filter(|&n| n >= &2).count()
@@ -87,12 +86,9 @@ fn part1(lines: &[Line]) -> usize {
 fn part2(lines: &[Line]) -> usize {
     let mut point_count = HashMap::new();
 
-    lines
-        .iter()
-        .flat_map(|line| line.to_points())
-        .for_each(|point| {
-            *point_count.entry(point).or_insert(0usize) += 1;
-        });
+    lines.iter().flat_map(Line::to_points).for_each(|point| {
+        *point_count.entry(point).or_insert(0_usize) += 1;
+    });
 
     point_count.values().filter(|&n| n >= &2).count()
 }

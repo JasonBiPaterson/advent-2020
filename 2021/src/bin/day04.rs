@@ -6,15 +6,16 @@ fn bingo_score(draws: &[u32], board: &[Vec<u32>]) -> Option<u32> {
     let is_bingo = (0..5).any(|i| {
         (0..5).all(|j| draws.contains(&board[i][j])) || (0..5).all(|j| draws.contains(&board[j][i]))
     });
-    match is_bingo {
-        true => Some(
+    if is_bingo {
+        Some(
             board
                 .iter()
                 .flatten()
                 .filter(|&n| !draws.contains(n))
                 .sum::<u32>(),
-        ),
-        false => None,
+        )
+    } else {
+        None
     }
 }
 

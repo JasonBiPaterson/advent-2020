@@ -4,12 +4,12 @@ fn stepn(fish_timers: &[u64; 9], n: u64) -> u64 {
     let mut timers = *fish_timers;
     for _ in 0..n {
         let tmp_timers = timers;
-        timers = [0u64; 9];
+        timers = [0_u64; 9];
         for (i, n) in tmp_timers.iter().enumerate() {
             match i {
                 0 => {
                     timers[6] += *n;
-                    timers[8] += *n
+                    timers[8] += *n;
                 }
                 _ => timers[i - 1] += *n,
             }
@@ -19,7 +19,7 @@ fn stepn(fish_timers: &[u64; 9], n: u64) -> u64 {
 }
 
 fn parse_input(input: &str) -> [u64; 9] {
-    let mut fish_timers = [0u64; 9];
+    let mut fish_timers = [0_u64; 9];
     input
         .trim()
         .split(',')
@@ -52,6 +52,6 @@ mod tests {
     #[test]
     fn test_part2() {
         let timers = parse_input(INPUT);
-        assert_eq!(stepn(&timers, 256), 26984457539);
+        assert_eq!(stepn(&timers, 256), 26_984_457_539);
     }
 }
