@@ -23,11 +23,10 @@ fn flash_window(i: usize, i_max: usize) -> std::ops::RangeInclusive<usize> {
     }
 }
 
-fn step(octopodes: &[Vec<i8>]) -> Vec<Vec<i8>> {
-    let mut octs = octopodes.to_vec();
-    let i_max = octs.len() - 1;
-    let j_max = octs[0].len() - 1;
-    for row in &mut octs {
+fn step(mut octopodes: Vec<Vec<i8>>) -> Vec<Vec<i8>> {
+    let i_max = octopodes.len() - 1;
+    let j_max = octopodes[0].len() - 1;
+    for row in &mut octopodes {
         for octopus in row {
             *octopus += 1;
         }
@@ -36,13 +35,13 @@ fn step(octopodes: &[Vec<i8>]) -> Vec<Vec<i8>> {
         let mut flashes = 0_u32;
         for i in 0..=i_max {
             for j in 0..=j_max {
-                if octs[i][j] > 9 {
-                    octs[i][j] = -1;
+                if octopodes[i][j] > 9 {
+                    octopodes[i][j] = -1;
                     flashes += 1;
                     for ii in flash_window(i, i_max) {
                         for jj in flash_window(j, j_max) {
-                            if octs[ii][jj] != -1 {
-                                octs[ii][jj] += 1;
+                            if octopodes[ii][jj] != -1 {
+                                octopodes[ii][jj] += 1;
                             };
                         }
                     }
@@ -53,22 +52,21 @@ fn step(octopodes: &[Vec<i8>]) -> Vec<Vec<i8>> {
             break;
         }
     }
-    for row in &mut octs {
+    for row in &mut octopodes {
         for octopus in row {
             if octopus == &-1 {
                 *octopus = 0;
             }
         }
     }
-    octs
+    octopodes
 }
 
-fn part1(octopodes: &[Vec<i8>]) -> u32 {
-    let mut octs: Vec<Vec<i8>> = octopodes.to_vec();
+fn part1(mut octopodes: Vec<Vec<i8>>) -> u32 {
     let mut flashes = 0_u32;
     for _ in 0..100 {
-        octs = step(&octs);
-        for row in &octs {
+        octopodes = step(octopodes);
+        for row in &octopodes {
             for octopus in row {
                 if octopus == &0 {
                     flashes += 1;
@@ -79,13 +77,12 @@ fn part1(octopodes: &[Vec<i8>]) -> u32 {
     flashes
 }
 
-fn part2(octopodes: &[Vec<i8>]) -> u32 {
+fn part2(mut octopodes: Vec<Vec<i8>>) -> u32 {
     let mut count = 0_u32;
-    let mut oct = octopodes.to_vec();
     loop {
-        oct = step(&oct);
+        octopodes = step(octopodes);
         count += 1;
-        if oct.iter().flatten().all(|&octopus| { octopus == 0 }) {
+        if octopodes.iter().flatten().all(|&octopus| { octopus == 0 }) {
             break;
         }
     }
@@ -97,8 +94,8 @@ fn main() {
 
     let octopodes = parse_input(&input);
 
-    println!("Part 1: {}", part1(&octopodes));
-    println!("Part 2: {}", part2(&octopodes));
+    println!("Part 1: {}", part1(octopodes.clone()));
+    println!("Part 2: {}", part2(octopodes));
 }
 
 #[cfg(test)]
@@ -120,12 +117,12 @@ mod tests {
     #[test]
     fn test_part1() {
         let octopodes = parse_input(INPUT);
-        assert_eq!(part1(&octopodes), 1656);
+        assert_eq!(part1(octopodes), 1656);
     }
 
     #[test]
     fn test_part2() {
         let octopodes = parse_input(INPUT);
-        assert_eq!(part2(&octopodes), 195);
+        assert_eq!(part2(octopodes), 195);
     }
 }
