@@ -37,6 +37,6 @@ mod tests {
     #[test]
     fn test_part2() {
         let parsed_input = parse_input(INPUT);
-        assert_eq!(part1(&parsed_input), 0);
+        assert_eq!(part2(&parsed_input), 0);
     }
 }
