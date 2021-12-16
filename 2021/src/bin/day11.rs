@@ -82,7 +82,7 @@ fn part2(mut octopodes: Vec<Vec<i8>>) -> u32 {
     loop {
         octopodes = step(octopodes);
         count += 1;
-        if octopodes.iter().flatten().all(|&octopus| { octopus == 0 }) {
+        if octopodes.iter().flatten().all(|&octopus| octopus == 0) {
             break;
         }
     }

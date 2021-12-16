@@ -97,7 +97,8 @@ fn part2(cavern: RefCavern) -> u32 {
         for m in 0..5 {
             for (i, row) in &mut cavern.iter().enumerate() {
                 for ceiling in row {
-                    full_cavern[i + cavern.len() * (m as usize)].push(((ceiling + n + m - 1) % 9) + 1);
+                    full_cavern[i + cavern.len() * (m as usize)]
+                        .push(((ceiling + n + m - 1) % 9) + 1);
                 }
             }
         }
