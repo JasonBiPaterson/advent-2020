@@ -7,7 +7,6 @@ fn parse_input(input: &str) -> Vec<bool> {
         .trim()
         .chars()
         .flat_map(|c| {
-            #[allow(clippy::cast_possible_truncation)]
             let n = c.to_digit(16).unwrap();
             (0_u32..=3).rev().map(move |m| (n >> m & 1) == 1)
         })
