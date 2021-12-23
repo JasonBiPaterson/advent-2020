@@ -38,9 +38,10 @@ impl Image {
                 ]
                 .iter()
                 .map(|t| {
-                        if t.0 < min_x || t.0 > max_x || t.1 < min_y || t.1 > max_y
-                        { return self.background }
-                        self.pixels.get(t).is_some()
+                    if t.0 < min_x || t.0 > max_x || t.1 < min_y || t.1 > max_y {
+                        return self.background;
+                    }
+                    self.pixels.get(t).is_some()
                 })
                 .fold(0, |n, b| (n << 1) | b as usize);
 
