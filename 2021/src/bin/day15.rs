@@ -1,97 +1,85 @@
+use aoc2021::dijkstra;
 use std::cmp::Ordering;
-use std::collections::BinaryHeap;
 use std::fs;
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq)]
-struct State {
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+struct Position {
     x: usize,
     y: usize,
-    cost: u32,
 }
 
-impl Ord for State {
+impl Ord for Position {
     fn cmp(&self, other: &Self) -> Ordering {
-        other
-            .cost
-            .cmp(&self.cost)
-            .then_with(|| self.x.cmp(&other.x))
-            .then_with(|| self.y.cmp(&other.y))
+        other.x.cmp(&self.x).then_with(|| self.y.cmp(&other.y))
     }
 }
 
-impl PartialOrd for State {
+impl PartialOrd for Position {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
 
-type Cavern = Vec<Vec<u32>>;
-type RefCavern<'a> = &'a [Vec<u32>];
+type Cavern = Vec<Vec<usize>>;
+type RefCavern<'a> = &'a [Vec<usize>];
 
 fn parse_input(input: &str) -> Cavern {
     input
         .trim()
         .lines()
-        .map(|line| line.chars().map(|ch| ch.to_digit(10).unwrap()).collect())
+        .map(|line| {
+            line.chars()
+                .map(|ch| ch.to_digit(10).unwrap() as usize)
+                .collect()
+        })
         .collect()
 }
 
-fn total_risk(cavern: RefCavern) -> u32 {
-    let mut heap = BinaryHeap::new();
+fn total_risk(cavern: RefCavern) -> usize {
     let goal = (cavern[0].len() - 1, cavern.len() - 1);
-    let mut dist: Cavern = (0..=goal.0)
-        .map(|_| (0..=goal.1).map(|_| u32::MAX).collect())
-        .collect();
-
-    heap.push(State {
-        x: 0,
-        y: 0,
-        cost: 0,
-    });
-
-    while let Some(State { x, y, cost }) = heap.pop() {
-        if (x, y) == goal {
-            return cost;
-        }
-        if cost > dist[x][y] {
-            continue;
-        }
-
-        let mut adj_ceiling: Vec<(usize, usize)> = vec![];
-        if x > 0 {
-            adj_ceiling.push((x - 1, y));
-        }
-        if y > 0 {
-            adj_ceiling.push((x, y - 1));
-        }
-        if x < goal.0 {
-            adj_ceiling.push((x + 1, y));
-        }
-        if y < goal.1 {
-            adj_ceiling.push((x, y + 1));
-        }
-
-        for &(a, b) in &adj_ceiling {
-            let next = State {
-                cost: cost + cavern[a][b],
-                x: a,
-                y: b,
-            };
-
-            if next.cost < dist[a][b] {
-                heap.push(next);
-                dist[a][b] = next.cost;
+    dijkstra::shortest_path(
+        &|Position { x, y }| {
+            let mut adj: Vec<dijkstra::Edge<Position>> = vec![];
+            if x > 0 {
+                adj.push(dijkstra::Edge {
+                    cost: cavern[x - 1][y],
+                    node: Position { x: x - 1, y },
+                });
             }
-        }
-    }
-    panic!()
+            if y > 0 {
+                adj.push(dijkstra::Edge {
+                    cost: cavern[x][y - 1],
+                    node: Position { x, y: y - 1 },
+                });
+            }
+            if x < goal.0 {
+                adj.push(dijkstra::Edge {
+                    cost: cavern[x + 1][y],
+                    node: Position { x: x + 1, y },
+                });
+            }
+            if y < goal.1 {
+                adj.push(dijkstra::Edge {
+                    cost: cavern[x][y + 1],
+                    node: Position { x, y: y + 1 },
+                });
+            }
+            adj
+        },
+        Position { x: 0, y: 0 },
+        Position {
+            x: goal.0,
+            y: goal.1,
+        },
+    )
+    .unwrap()
 }
 
-fn part1(cavern: RefCavern) -> u32 {
+fn part1(cavern: RefCavern) -> usize {
     total_risk(cavern)
 }
 
-fn part2(cavern: RefCavern) -> u32 {
+fn part2(cavern: RefCavern) -> usize {
     let mut full_cavern: Cavern = vec![vec![]; cavern.len() * 5];
     for n in 0..5 {
         for m in 0..5 {
