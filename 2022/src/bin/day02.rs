@@ -50,8 +50,8 @@ fn main() {
     let input: String = fs::read_to_string("input/day02").expect("Failed to read input");
     let guide = parse(&input);
 
-    println!("Part 1: {:?}", part1(&guide));
-    println!("Part 2: {:?}", part2(&guide));
+    println!("Part 1: {}", part1(&guide));
+    println!("Part 2: {}", part2(&guide));
 }
 
 #[cfg(test)]
