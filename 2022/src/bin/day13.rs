@@ -1,6 +1,5 @@
+use nom::{bytes::complete::tag, IResult, Parser};
 use std::fs;
-
-use nom::{bytes::complete::tag, Parser, IResult};
 
 #[derive(PartialEq, Eq, Debug)]
 enum Packet {
@@ -38,12 +37,11 @@ fn parse_packet(input: &str) -> IResult<&str, Packet> {
 }
 
 fn parse(input: &str) -> Vec<(Packet, Packet)> {
-    let a: Vec<(_, _)> = input
+    input
         .split("\n\n")
         .map(|s| s.split_once("\n").unwrap())
         .map(|(a, b)| (parse_packet(a).unwrap().1, parse_packet(b).unwrap().1))
-        .collect();
-    a
+        .collect()
 }
 
 fn part1(pairs: &[(Packet, Packet)]) -> usize {
