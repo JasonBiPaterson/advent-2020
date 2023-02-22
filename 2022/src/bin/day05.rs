@@ -1,6 +1,6 @@
 use std::fs;
 
-use nom::{bytes, character, error, sequence, IResult};
+use nom::{bytes, character, sequence, IResult};
 
 type CrateStack = Vec<char>;
 type Procedure = (usize, usize, usize);
@@ -26,7 +26,7 @@ fn parse(input: &str) -> (Vec<CrateStack>, Vec<Procedure>) {
     let procedures: Vec<Procedure> = procedure_str
         .lines()
         .map(|line| {
-            let tmp: IResult<_, _, error::Error<_>> = sequence::tuple((
+            let tmp: IResult<_, _> = sequence::tuple((
                 bytes::complete::tag("move "),
                 character::complete::u32,
                 bytes::complete::tag(" from "),
@@ -91,13 +91,13 @@ move 1 from 1 to 2";
 
     #[test]
     fn test_part1() {
-        let (crate_stacks, procedures) = parse(&TEST_INPUT);
+        let (crate_stacks, procedures) = parse(TEST_INPUT);
         assert_eq!(part1(crate_stacks, &procedures), "CMZ");
     }
 
     #[test]
     fn test_part2() {
-        let (crate_stacks, procedures) = parse(&TEST_INPUT);
+        let (crate_stacks, procedures) = parse(TEST_INPUT);
         assert_eq!(part2(crate_stacks, &procedures), "MCD");
     }
 }

@@ -5,6 +5,18 @@ fn parse(input: &str) -> Vec<Vec<char>> {
     input.lines().map(|l| l.chars().collect()).collect()
 }
 
+fn is_reachable(grid: &[Vec<char>], (x1, y1): (usize, usize), (x2, y2): (usize, usize)) -> bool {
+    let c1 = grid[x1][y1];
+    let c2 = grid[x2][y2];
+    if c1 == 'S' {
+        'a'.to_digit(36).unwrap() >= c2.to_digit(36).unwrap() - 1
+    } else if c2 == 'E' {
+        c1.to_digit(36).unwrap() >= 'z'.to_digit(36).unwrap() - 1
+    } else {
+        c1.to_digit(36).unwrap() >= c2.to_digit(36).unwrap() - 1
+    }
+}
+
 fn part1(grid: &[Vec<char>]) -> usize {
     let mut start = (0, 0);
     let mut end = (0, 0);
@@ -20,21 +32,6 @@ fn part1(grid: &[Vec<char>]) -> usize {
 
     let x_max = grid.len() - 1;
     let y_max = grid[0].len() - 1;
-    fn is_reachable(
-        grid: &[Vec<char>],
-        (x1, y1): (usize, usize),
-        (x2, y2): (usize, usize),
-    ) -> bool {
-        let c1 = grid[x1][y1];
-        let c2 = grid[x2][y2];
-        if c1 == 'S' {
-            'a'.to_digit(36).unwrap() >= c2.to_digit(36).unwrap() - 1
-        } else if c2 == 'E' {
-            c1.to_digit(36).unwrap() >= 'z'.to_digit(36).unwrap() - 1
-        } else {
-            c1.to_digit(36).unwrap() >= c2.to_digit(36).unwrap() - 1
-        }
-    }
 
     let mut q = VecDeque::new();
     let mut visited = HashSet::new();
@@ -94,21 +91,6 @@ fn part2(grid: &[Vec<char>]) -> usize {
 
     let x_max = grid.len() - 1;
     let y_max = grid[0].len() - 1;
-    fn is_reachable(
-        grid: &[Vec<char>],
-        (x1, y1): (usize, usize),
-        (x2, y2): (usize, usize),
-    ) -> bool {
-        let c1 = grid[x1][y1];
-        let c2 = grid[x2][y2];
-        if c1 == 'S' {
-            'a'.to_digit(36).unwrap() >= c2.to_digit(36).unwrap() - 1
-        } else if c2 == 'E' {
-            c1.to_digit(36).unwrap() >= 'z'.to_digit(36).unwrap() - 1
-        } else {
-            c1.to_digit(36).unwrap() >= c2.to_digit(36).unwrap() - 1
-        }
-    }
 
     let mut q = VecDeque::new();
     let mut visited = HashSet::new();
@@ -176,12 +158,11 @@ abdefghi";
 
     #[test]
     fn test_part1() {
-        assert_eq!(part1(&parse(&TEST_INPUT)), 31);
+        assert_eq!(part1(&parse(TEST_INPUT)), 31);
     }
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(&parse(&TEST_INPUT)), 29);
+        assert_eq!(part2(&parse(TEST_INPUT)), 29);
     }
 }
-

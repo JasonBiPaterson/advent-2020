@@ -39,7 +39,7 @@ fn parse_packet(input: &str) -> IResult<&str, Packet> {
 fn parse(input: &str) -> Vec<(Packet, Packet)> {
     input
         .split("\n\n")
-        .map(|s| s.split_once("\n").unwrap())
+        .map(|s| s.split_once('\n').unwrap())
         .map(|(a, b)| (parse_packet(a).unwrap().1, parse_packet(b).unwrap().1))
         .collect()
 }
@@ -106,11 +106,11 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        assert_eq!(part1(&parse(&TEST_INPUT)), 13);
+        assert_eq!(part1(&parse(TEST_INPUT)), 13);
     }
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(&parse(&TEST_INPUT)), 140);
+        assert_eq!(part2(&parse(TEST_INPUT)), 140);
     }
 }

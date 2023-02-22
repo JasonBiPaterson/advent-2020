@@ -53,11 +53,11 @@ fn bad_ranges(report: &[(Position, Position)], y: i64) -> Vec<(i64, i64)> {
             let a = ranges[i];
             let b = ranges[j];
             if (a.0 <= b.0 && b.0 <= a.1 + 1) || (a.0 - 1 <= b.1 && b.1 <= a.1) {
-                ranges[j] = (a.0.min(b.0), a.1.max(b.1))
+                ranges[j] = (a.0.min(b.0), a.1.max(b.1));
             }
         }
     }
-    ranges.sort();
+    ranges.sort_unstable();
     ranges.dedup();
     ranges
 }
@@ -70,7 +70,7 @@ fn part1(report: &[(Position, Position)], y: i64) -> i64 {
         .filter(|&(_, beacon)| beacon.y == y)
         .map(|(_, beacon)| beacon.x)
         .collect();
-    beacon_xs.sort();
+    beacon_xs.sort_unstable();
     beacon_xs.dedup();
 
     let mut ans = 0;
@@ -90,7 +90,7 @@ fn part2(report: &[(Position, Position)], search_max: i64) -> i64 {
         let ranges = bad_ranges(report, y);
         if ranges.len() > 1 {
             let x = ranges[0].1 + 1;
-            return 4000000 * x + y;
+            return 4_000_000 * x + y;
         }
     }
     0
@@ -100,8 +100,8 @@ fn main() {
     let input: String = fs::read_to_string("input/day15").expect("Failed to read input");
     let report = parse(&input);
 
-    println!("Part 1: {}", part1(&report, 2000000));
-    println!("Part 2: {}", part2(&report, 4000000));
+    println!("Part 1: {}", part1(&report, 2_000_000));
+    println!("Part 2: {}", part2(&report, 4_000_000));
 }
 
 #[cfg(test)]
@@ -124,11 +124,11 @@ Sensor at x=20, y=1: closest beacon is at x=15, y=3";
 
     #[test]
     fn test_part1() {
-        assert_eq!(part1(&parse(&TEST_INPUT), 10), 26);
+        assert_eq!(part1(&parse(TEST_INPUT), 10), 26);
     }
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(&parse(&TEST_INPUT), 20), 56000011);
+        assert_eq!(part2(&parse(TEST_INPUT), 20), 56_000_011);
     }
 }

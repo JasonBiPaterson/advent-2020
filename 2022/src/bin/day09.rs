@@ -3,7 +3,7 @@ use std::{collections::HashSet, fs};
 fn parse(s: &str) -> Vec<(char, u32)> {
     s.lines()
         .map(|l| {
-            let tmp: nom::IResult<_, _, nom::error::Error<_>> = nom::sequence::separated_pair(
+            let tmp: nom::IResult<_, _> = nom::sequence::separated_pair(
                 nom::character::complete::anychar,
                 nom::bytes::complete::tag(" "),
                 nom::character::complete::u32,

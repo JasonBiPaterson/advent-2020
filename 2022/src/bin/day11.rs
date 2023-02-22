@@ -22,13 +22,13 @@ fn parse(input: &str) -> Vec<Monkey> {
         let op_tmp = line[2]
             .strip_prefix("  Operation: new = ")
             .unwrap()
-            .splitn(3, " ")
+            .splitn(3, ' ')
             .collect::<Vec<&str>>();
         let operation = (
             op_tmp[0].parse::<u64>().ok(),
-            match op_tmp[1] {
-                "*" => std::ops::Mul::mul,
-                "+" => std::ops::Add::add,
+            match op_tmp.get(1) {
+                Some(&"*") => std::ops::Mul::mul,
+                Some(&"+") => std::ops::Add::add,
                 _ => unreachable!(),
             },
             op_tmp[2].parse::<u64>().ok(),
@@ -163,11 +163,11 @@ Monkey 3:
 
     #[test]
     fn test_part1() {
-        assert_eq!(part1(&parse(&TEST_INPUT)), 10605);
+        assert_eq!(part1(&parse(TEST_INPUT)), 10605);
     }
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(&parse(&TEST_INPUT)), 2713310158);
+        assert_eq!(part2(&parse(TEST_INPUT)), 2_713_310_158);
     }
 }

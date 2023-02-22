@@ -64,6 +64,56 @@ fn find_path(
     max_flow
 }
 
+fn calculate_flow(
+    labels: &[&str],
+    mut remaining_time: u32,
+    valve_lookup: &HashMap<&str, &Valve>,
+    steps_lookup: &HashMap<(&str, &str), u32>,
+) -> u32 {
+    let mut total_flow = 0;
+    for window in labels.windows(2) {
+        let a = window[0];
+        let b = window[1];
+        remaining_time -= steps_lookup.get(&(a, b)).unwrap() + 1;
+        total_flow += remaining_time * valve_lookup.get(b).unwrap().flow_rate;
+    }
+    total_flow
+}
+
+fn gen_paths<'a>(
+    paths: &mut HashSet<Vec<&'a str>>,
+    // node: &str,
+    path: &[&'a str],
+    time_remaining: u32,
+    remaining_labels: &HashSet<&'a str>,
+    steps_lookup: &HashMap<(&str, &str), u32>,
+) {
+    if remaining_labels.is_empty() {
+        paths.insert(path.to_vec());
+    }
+    for &label in remaining_labels {
+        let steps = steps_lookup.get(&(path.last().unwrap(), label)).unwrap() + 1;
+        if steps <= time_remaining {
+            let mut remaining_labels = remaining_labels.clone();
+            remaining_labels.remove(label);
+
+            let next_time = time_remaining - steps;
+            let mut next_path = path.to_vec();
+            next_path.push(label);
+
+            gen_paths(
+                paths,
+                &next_path,
+                next_time,
+                &remaining_labels,
+                steps_lookup,
+            );
+        } else {
+            paths.insert(path.to_vec());
+        }
+    }
+}
+
 fn process_valves<'a>(
     valves: &'a [Valve<'a>],
 ) -> (
@@ -130,7 +180,20 @@ fn part1(valves: &[Valve]) -> u32 {
 fn part2(valves: &[Valve]) -> u32 {
     let (nonzero_labels, valve_lookup, steps_lookup) = process_valves(valves);
 
-    find_path("AA", 26, 0, &nonzero_labels, &valve_lookup, &steps_lookup)
+    let mut paths = HashSet::new();
+    gen_paths(&mut paths, &["AA"], 26, &nonzero_labels, &steps_lookup);
+
+    let mut max_flow = 0;
+    for path in paths {
+        let mut remaining_labels = nonzero_labels.clone();
+        for &label in &path {
+            remaining_labels.remove(label);
+        }
+        let new_flow = calculate_flow(&path, 26, &valve_lookup, &steps_lookup)
+            + find_path("AA", 26, 0, &remaining_labels, &valve_lookup, &steps_lookup);
+        max_flow = max_flow.max(new_flow);
+    }
+    max_flow
 }
 
 fn main() {

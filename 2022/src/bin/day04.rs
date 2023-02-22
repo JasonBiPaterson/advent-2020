@@ -1,4 +1,4 @@
-use nom::{bytes, character, error, sequence, IResult};
+use nom::{bytes, character, sequence, IResult};
 use std::fs;
 
 fn part1(input: &[Assignment]) -> usize {
@@ -21,7 +21,7 @@ fn parse(input: &str) -> Vec<Assignment> {
     input
         .lines()
         .map(|line| {
-            let a: IResult<_, _, error::Error<_>> = sequence::separated_pair(
+            let a: IResult<_, _> = sequence::separated_pair(
                 sequence::separated_pair(
                     character::complete::u32,
                     bytes::complete::tag("-"),

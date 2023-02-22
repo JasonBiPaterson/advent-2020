@@ -9,7 +9,7 @@ enum Instruction {
 fn parse(s: &str) -> Vec<Instruction> {
     s.lines()
         .map(|l| {
-            let tmp: nom::IResult<_, _, nom::error::Error<_>> = nom::sequence::separated_pair(
+            let tmp: nom::IResult<_, _> = nom::sequence::separated_pair(
                 nom::bytes::complete::tag("addx"),
                 nom::bytes::complete::tag(" "),
                 nom::character::complete::i32,

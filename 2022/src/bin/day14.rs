@@ -28,8 +28,7 @@ fn drop_sand(grid: &[Vec<bool>], (x, y): (usize, usize)) -> Option<(usize, usize
         .iter()
         .enumerate()
         .skip(y)
-        .skip_while(|&(_, b)| !b)
-        .next();
+        .find(|&(_, b)| *b);
 
     if let &Some((y_new, _)) = col {
         if !grid[x - 1][y_new] {
@@ -73,7 +72,7 @@ fn part1(paths: &[Vec<(usize, usize)>]) -> usize {
                 Some(new_pos) if new_pos == pos => {
                     grid[pos.0][pos.1] = true;
                     grains += 1;
-                    maybe_pos = None
+                    maybe_pos = None;
                 }
                 Some(new_pos) => maybe_pos = Some(new_pos),
                 None => {
@@ -105,8 +104,8 @@ fn part2(paths: &[Vec<(usize, usize)>]) -> usize {
         }
     }
 
-    for x in 0..grid.len() {
-        grid[x][y_max + 2] = true;
+    for row in &mut grid {
+        row[y_max + 2] = true;
     }
 
     let mut grains = 0;
@@ -149,11 +148,11 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        assert_eq!(part1(&parse(&TEST_INPUT)), 24);
+        assert_eq!(part1(&parse(TEST_INPUT)), 24);
     }
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(&parse(&TEST_INPUT)), 93);
+        assert_eq!(part2(&parse(TEST_INPUT)), 93);
     }
 }
