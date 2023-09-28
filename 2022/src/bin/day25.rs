@@ -7,11 +7,11 @@ fn from_snafu_head(c: char, len: usize) -> u64 {
         _ => unreachable!(),
     };
     let mut ans = 0;
-    for i in 0_u32..((len as u32) - 1) {
-        ans += 2 * 5_u64.pow(i)
+    for i in 0_u32..(u32::try_from(len).unwrap() - 1) {
+        ans += 2 * 5_u64.pow(i);
     }
     ans += 1;
-    ans += (n - 1) * 5_u64.pow((len as u32) - 1);
+    ans += (n - 1) * 5_u64.pow(u32::try_from(len).unwrap() - 1);
     ans
 }
 
@@ -30,7 +30,7 @@ fn from_snafu(snafu: &str) -> u64 {
             '2' => 4,
             _ => unreachable!(),
         };
-        ans += 5_u64.pow(i as u32) * n;
+        ans += 5_u64.pow(u32::try_from(i).unwrap()) * n;
     }
     ans += from_snafu_head(chars[0], snafu_len);
     ans
@@ -66,9 +66,8 @@ fn to_snafu(n: u64) -> String {
             let s: String = tmp.iter().collect();
             if from_snafu(&s) > n {
                 break;
-            } else {
-                ans = tmp;
             }
+            ans = tmp;
         }
     }
     ans.iter().collect()
