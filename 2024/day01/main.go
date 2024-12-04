@@ -26,10 +26,8 @@ func parse() ([]int, []int) {
 }
 
 func part1(a []int, b []int) int {
-	a = slices.Clone(a)
-	b = slices.Clone(b)
-	slices.Sort(a)
-	slices.Sort(b)
+	a = slices.Sorted(slices.Values(a))
+	b = slices.Sorted(slices.Values(b))
 
 	ans := 0
 	for i := 0; i < len(a); i++ {
