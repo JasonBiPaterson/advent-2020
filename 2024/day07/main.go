@@ -93,8 +93,9 @@ func (e equation) hasOps2() bool {
 	{
 		testValueStr := strconv.Itoa(testValue)
 		lastStr := strconv.Itoa(last)
-		if len(lastStr) < len(testValueStr) && testValueStr[len(testValueStr)-len(lastStr):] == lastStr {
-			n, _ := strconv.Atoi(testValueStr[:len(testValueStr)-len(lastStr)])
+		idx := len(testValueStr) - len(lastStr)
+		if idx > 0 && testValueStr[idx:] == lastStr {
+			n, _ := strconv.Atoi(testValueStr[:idx])
 			if (equation{n, butLast}).hasOps2() {
 				return true
 			}
