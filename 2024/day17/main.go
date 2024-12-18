@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -55,6 +56,14 @@ func (d *Device) step(output *[]int) {
 	d.pointer += 2
 }
 
+func (d Device) run() []int {
+	output := []int{}
+	for d.pointer < len(d.program) {
+		d.step(&output)
+	}
+	return output
+}
+
 func parse() Device {
 	scanner := bufio.NewScanner(os.Stdin)
 	d := Device{}
@@ -78,11 +87,7 @@ func parse() Device {
 }
 
 func part1(d Device) string {
-	output := []int{}
-	for d.pointer < len(d.program) {
-		d.step(&output)
-	}
-
+	output := d.run()
 	strN := make([]string, len(output))
 	for i, n := range output {
 		strN[i] = strconv.Itoa(n)
@@ -90,8 +95,26 @@ func part1(d Device) string {
 	return strings.Join(strN, ",")
 }
 
+// Don't ask me to prove this
+// Saw a pattern, assumed it worked
 func part2(d Device) int {
-	return 0
+	ns := []int{0}
+	for i, _ := range slices.Backward(d.program) {
+		ms := []int{}
+		for _, n := range ns {
+			for j := 0; j <= 0b111; j++ {
+				m := n<<3 + j
+				dj := d
+				dj.a = m
+				output := dj.run()
+				if slices.Equal(d.program[i:], output) {
+					ms = append(ms, m)
+				}
+			}
+		}
+		ns = ms
+	}
+	return slices.Min(ns)
 }
 
 func main() {
