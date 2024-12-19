@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"slices"
 	"strings"
 )
 
@@ -23,50 +22,37 @@ func parse() ([]string, []string) {
 	return patterns, designs
 }
 
-func f(design string, p *[]string) bool {
-	for _, pattern := range *p {
-		if len(design) < len(pattern) {
+var cache = map[string]int{}
+func getWays(s string, ps []string) int {
+	if n, ok := cache[s]; ok {
+		return n
+	}
+	for _, p := range ps {
+		if len(s) < len(p) {
 			continue
 		}
-		if design[:len(pattern)] == pattern {
-			if len(design) == len(pattern) {
-				return true
-			} else if f(design[len(pattern):], p) {
-				return true
+		if s[:len(p)] == p {
+			if len(s) == len(p) {
+				cache[s] += 1
+			} else {
+				cache[s] += getWays(s[len(p):], ps)
 			}
 		}
 	}
-	return false
-}
-
-func part1(patterns []string, designs []string) int {
-	slices.SortFunc(patterns, func(a, b string) int { return len(a) - len(b) })
-
-	reducedPatterns := []string{}
-	for i, p := range slices.Backward(patterns) {
-		a := patterns[:i]
-		if !f(p, &a) {
-			reducedPatterns = append(reducedPatterns, p)
-		}
-	}
-
-	ans := 0
-	for _, design := range designs {
-		if f(design, &reducedPatterns) {
-			ans++
-		}
-	}
-	return ans
-}
-
-func part2(patterns []string, designs []string) int {
-	ans := 0
-	return ans
+	return cache[s]
 }
 
 func main() {
 	patterns, designs := parse()
 
-	fmt.Println("Part 1:", part1(patterns, designs))
-	fmt.Println("Part 2:", part2(patterns, designs))
+	part1 := 0
+	part2 := 0
+	for _, design := range designs {
+		n := getWays(design, patterns)
+		part1 += min(n, 1)
+		part2 += n
+	}
+
+	fmt.Println("Part 1:", part1)
+	fmt.Println("Part 2:", part2)
 }
